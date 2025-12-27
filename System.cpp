@@ -3,7 +3,7 @@
 using namespace std;
 
 int main()
-{
+{        
     SpeechManager sm;
     int choice = 0;
     while (true)
@@ -14,7 +14,7 @@ int main()
         switch (choice)
         {
         case 1:
-            
+            sm.startSpeech();
             break;
         case 2:
             
@@ -31,5 +31,4 @@ int main()
             break;
         }
     }
-    
 }
