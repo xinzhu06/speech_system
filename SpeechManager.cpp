@@ -41,6 +41,7 @@ using namespace std;
         this->victory.clear();
         this->m_speaker.clear();
         this->index = 1;
+        this->m_Record.clear();
     }
 
 //创建成员
@@ -84,6 +85,16 @@ using namespace std;
         this->showScore();
         //4.保存分数到文件中
         this->saveRecord();
+
+        //初始化选手
+        this->initSpeaker();
+
+        //创建选手
+        this->createSpeaker();
+
+        //获取往届记录
+        this->loadRecord();
+
         cout << "game over" << endl;
         system("pause");
         system("cls");
@@ -208,7 +219,9 @@ using namespace std;
 
         //关闭
         ofs.close();
-        cout << "save over";
+        cout << "save over" << endl;
+        //更新文件状态
+        this->fileIsEmpt = false;
     }
 
     //读取记录
@@ -219,16 +232,14 @@ using namespace std;
         if(!ifs.is_open())
         {
             this->fileIsEmpt = true;
-            cout << "wen jian bu cun zai" << endl;
             ifs.close();
             return;
         }
 
         char ch;
-        cin >> ch;
+        ifs >> ch;
         if(ifs.eof())
         {
-            cout << "wen jian wei kong " << endl;
             this->fileIsEmpt = true;
             ifs.close();
             return;
@@ -239,15 +250,79 @@ using namespace std;
         ifs.putback(ch);//将上面读取的字符放回来
 
         string data;
+        int index = 0;
 
         while (ifs >> data)
         {
-            cout << data << endl;
+            vector<string>v;
+            int pos = -1;
+            int start = 0;
+            while (true)
+            {
+                pos = data.find(",",start);
+                if(pos == -1)
+                {
+                    break;
+                }
+                string temp = data.substr(start,pos - start);
+                v.push_back(temp);
+                start = pos + 1;
+            }
+            this->m_Record.insert(make_pair(index,v));
+            index++;
         }
 
         ifs.close();
     }
 
+//显示往届记录
+    void SpeechManager::showRecord()
+    {
+        if(this->fileIsEmpt)
+        {
+            cout << "wen jian wei kong or wen jian bu cun zai!" << endl;
+        }else{
+            for (int i = 0; i < this->m_Record.size(); i++)
+            {
+                cout << i+1 << "jie" << endl
+                << "      Champion:" << this->m_Record[i][0] << "||" << this->m_Record[i][1] << endl
+                << "      Runner-up:" << this->m_Record[i][2] << "||" << this->m_Record[i][4] << endl
+                << "      Third place:" << this->m_Record[i][4] << "||" << this->m_Record[i][5] << endl;
+            }
+            system("pause");
+            system("cls");
+        }
+    }
+
+//清空记录
+    void SpeechManager::clearRecord()
+    {
+        cout << "clear?" << endl;
+        cout << "y or n" << endl;
+
+        string select;
+        
+        cin >> select ;
+
+        if(select == "y")
+        {
+            ofstream ofs("speech.csv",ios::trunc);
+            ofs.close();
+            //初始化选手
+            this->initSpeaker();
+
+            //创建选手
+            this->createSpeaker();
+
+            //获取往届记录
+            this->loadRecord();
+
+            cout << "Clear Completed!" << endl;
+        }
+
+        system("pause");
+        system("cls");
+    }
 
 //析构
     SpeechManager::~SpeechManager()
