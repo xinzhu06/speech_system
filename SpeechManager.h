@@ -61,6 +61,15 @@ public:
 //保存记录
     void saveRecord();
 
+//读取记录
+    void loadRecord();
+
+//判断文件是否为空
+    bool fileIsEmpt;
+
+//存放往届记录的容器
+    map<int,vector<string>>m_Record;
+
 //析构
     ~SpeechManager();
 

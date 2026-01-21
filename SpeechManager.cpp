@@ -9,6 +9,9 @@ using namespace std;
 
         //创建选手
         this->createSpeaker();
+
+        //获取往届记录
+        this->loadRecord();
     }
 
 //菜单
@@ -207,6 +210,44 @@ using namespace std;
         ofs.close();
         cout << "save over";
     }
+
+    //读取记录
+    void SpeechManager::loadRecord()
+    {
+        ifstream ifs("speech.csv",ios::in);
+        
+        if(!ifs.is_open())
+        {
+            this->fileIsEmpt = true;
+            cout << "wen jian bu cun zai" << endl;
+            ifs.close();
+            return;
+        }
+
+        char ch;
+        cin >> ch;
+        if(ifs.eof())
+        {
+            cout << "wen jian wei kong " << endl;
+            this->fileIsEmpt = true;
+            ifs.close();
+            return;
+        }
+
+        this->fileIsEmpt = false;
+
+        ifs.putback(ch);//将上面读取的字符放回来
+
+        string data;
+
+        while (ifs >> data)
+        {
+            cout << data << endl;
+        }
+
+        ifs.close();
+    }
+
 
 //析构
     SpeechManager::~SpeechManager()
