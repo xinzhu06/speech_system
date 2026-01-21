@@ -8,6 +8,7 @@
 #include <deque>
 #include <functional>
 #include <numeric>
+#include <fstream>
 #include "Speaker.h"
 using namespace std;
 
@@ -56,6 +57,9 @@ public:
 
 //显示晋级选手
     void showScore();
+
+//保存记录
+    void saveRecord();
 
 //析构
     ~SpeechManager();

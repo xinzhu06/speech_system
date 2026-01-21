@@ -79,7 +79,12 @@ using namespace std;
         this->speechContest();
         //3.显示晋级结果
         this->showScore();
-    }
+        //4.保存分数到文件中
+        this->saveRecord();
+        cout << "game over" << endl;
+        system("pause");
+        system("cls");
+        }  
 //抽签
     void SpeechManager::speechDraw()
     {
@@ -183,6 +188,24 @@ using namespace std;
         system("pause");
         system("cls");
         this->showMenu();
+    }
+
+//保存记录
+    void SpeechManager::saveRecord()
+    {
+        ofstream ofs;
+        ofs.open("speech.csv",ios::out | ios::app);
+        
+        //将每个人的数据写入文件中
+        for(auto &s:victory)
+        {
+            ofs << s << "," << this->m_speaker[s].m_score[1] << ",";
+        }
+        ofs << endl;
+
+        //关闭
+        ofs.close();
+        cout << "save over";
     }
 
 //析构
